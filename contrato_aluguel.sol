@@ -28,23 +28,23 @@ contract ContratoAluguel {
       return (locador, locatario);
   }
 
-  function alterarNome(uint8 tipoPessoa, string memory novoNome) public {
+  function alterarNome(uint8 tipoPessoa, string memory newName) public {
     if (tipoPessoa == 1) {
-      locador = novoNome;
+      locador = newName;
     } else if (tipoPessoa == 2) {
-      locatario = novoNome;
+      locatario = newName;
     } else {
-      revert("Tipo de pessoa invalido.  Informe: 1 - Locador e 2 - Locatario.");
+      revert("Tipo invalido.  Informe: 1-Locador e 2-Locatario.");
     }
   }
 
 //Reajuste do Aluguel
 
-  function reajusteAluguel(uint256 mes, uint256 aumento) public {
+  function reajusteAluguel(uint256 mes, uint256 reajuste) public {
     require(mes > 0 && mes <= 36, "Mes invalido. Por favor, insira um valor entre 1 e 36.");
 
     for (uint i = mes; i < 36; i++) {
-      valoresAluguel[i] += aumento;
+      valoresAluguel[i] += reajuste;
     }
   }
 }
