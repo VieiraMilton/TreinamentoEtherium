@@ -20,7 +20,7 @@ contract ContratoAluguel {
 // Valor do aluguel
 
   function valorAluguel(uint256 mes) public view returns (uint256) {
-    require(mes > 0 && mes <= 36, "Mês inválido. Insira um valor entre 1 e 36.");
+    require(mes > 0 && mes <= 36, "Mes invalido. Insira um valor entre 1 e 36.");
     return valoresAluguel[mes - 1]; 
   }
 
@@ -34,14 +34,14 @@ contract ContratoAluguel {
     } else if (tipoPessoa == 2) {
       locatario = novoNome;
     } else {
-      revert("Tipo de pessoa inválido.  Informe: 1 - Locador e 2 - Locatário.");
+      revert("Tipo de pessoa invalido.  Informe: 1 - Locador e 2 - Locatario.");
     }
   }
 
 //Reajuste do Aluguel
 
   function reajusteAluguel(uint256 mes, uint256 aumento) public {
-    require(mes > 0 && mes <= 36, "Mês inválido. Por favor, insira um valor entre 1 e 36.");
+    require(mes > 0 && mes <= 36, "Mes invalido. Por favor, insira um valor entre 1 e 36.");
 
     for (uint i = mes; i < 36; i++) {
       valoresAluguel[i] += aumento;
