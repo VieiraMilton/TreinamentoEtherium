@@ -48,4 +48,4 @@ contract ContratoAluguel {
     }
   }
 }
-
+// 0xc4d26824000DCa8B67602deA7930b953670B532e
