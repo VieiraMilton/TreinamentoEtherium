@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.20;
 
-// transaction - 0xDAD1f0a2eeB8d50e0FCf5F050F523a1981c203a4
-
 contract AluguelContract {
     string nomeLocador;
     string nomeLocatario;
