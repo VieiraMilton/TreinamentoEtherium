@@ -1,51 +1,90 @@
 // SPDX-License-Identifier: MIT
-
 pragma solidity 0.8.20;
 
-contract ContratoAluguel {
+// transaction - 0xDAD1f0a2eeB8d50e0FCf5F050F523a1981c203a4
 
-  string public locador;
-  string public locatario;
-  uint256[36] public valoresAluguel;
+contract AluguelContract {
+    string nomeLocador;
+    string nomeLocatario;
+    uint256[] valoresAluguel;
+    uint256 posicaoAluguel = 1;
 
-  constructor(string memory _locador, string memory _locatario, uint256 valorInicialAluguel) {
-    locador = _locador;
-    locatario = _locatario;
-
-    for (uint i = 0; i < 36; i++) {
-      valoresAluguel[i] = valorInicialAluguel;
+    struct Aluguel {
+        string nomeLocador;
+        string nomeLocatario;
+        uint256[] valoresAluguel;
     }
-  }
 
-// Valor do aluguel
+    mapping(uint256 => Aluguel) public alugueis;
 
-  function valorAluguel(uint256 mes) public view returns (uint256) {
-    require(mes > 0 && mes <= 36, "Mes invalido. Insira um valor entre 1 e 36.");
-    return valoresAluguel[mes - 1]; 
-  }
-
-  function getNomes() public view returns (string memory, string memory) {
-      return (locador, locatario);
-  }
-
-  function alterarNome(uint8 tipoPessoa, string memory newName) public {
-    if (tipoPessoa == 1) {
-      locador = newName;
-    } else if (tipoPessoa == 2) {
-      locatario = newName;
-    } else {
-      revert("Tipo invalido.  Informe: 1-Locador e 2-Locatario.");
+    constructor(
+        string memory _nomeLocador,
+        string memory _nomeLocatorio,
+        uint256 valorInicialAluguel
+    ) {
+        for (uint256 i = 0; i < 36; i++) {
+            valoresAluguel.push(valorInicialAluguel);
+        }
+        Aluguel memory aluguel = Aluguel(
+            _nomeLocador,
+            _nomeLocatorio,
+            valoresAluguel
+        );
+        alugueis[posicaoAluguel] = aluguel;
     }
-  }
 
-//Reajuste do Aluguel
-
-  function reajusteAluguel(uint256 mes, uint256 reajuste) public {
-    require(mes > 0 && mes <= 36, "Mes invalido. Por favor, insira um valor entre 1 e 36.");
-
-    for (uint i = mes; i < 36; i++) {
-      valoresAluguel[i] += reajuste;
+    modifier validaMesAluguel(uint256 numeroMes) {
+        require(numeroMes > 0, "mes nao existe!");
+        _;
     }
-  }
+
+    function retornarValorAluguelPorMes(uint256 numeroMes)
+        external
+        view
+        validaMesAluguel(numeroMes)
+        returns (uint256)
+    {
+        return alugueis[posicaoAluguel].valoresAluguel[numeroMes - 1];
+    }
+
+    function retornarNomesParticipantes()
+        public
+        view
+        returns (string memory, string memory)
+    {
+        return (
+            alugueis[posicaoAluguel].nomeLocador,
+            alugueis[posicaoAluguel].nomeLocatario
+        );
+    }
+
+    function retornarNomeLocatorio() public view returns (string memory) {
+        return alugueis[posicaoAluguel].nomeLocador;
+    }
+
+    function alterarNome(uint256 tipoPessoa, string memory novoNome) public {
+        require(bytes(novoNome).length != 0, "nome nao pode estar vazio");
+
+        if (tipoPessoa == 1) {
+            alugueis[posicaoAluguel].nomeLocatario = novoNome;
+        } else if (tipoPessoa == 2) {
+            alugueis[posicaoAluguel].nomeLocador = novoNome;
+        }else{
+             revert("Digite um tipo de pessoa valido");
+        }
+    }
+
+    function reajustarAluguel(uint256 mesInicial, uint256 valorReajuste)
+        external
+        validaMesAluguel(mesInicial)
+    {
+        if (valorReajuste <= 0) {
+            revert("Valor do reajuste invalido");
+        }
+        uint256 indice = mesInicial - 1;
+        for (uint256 i = indice; i < 36; i++) {
+            alugueis[posicaoAluguel].valoresAluguel[i] += valorReajuste;
+        }
+    }
 }
-// 0xc4d26824000DCa8B67602deA7930b953670B532e
+// 0xEFe6576e30a69a920879051D7AE214F0EcD5081c
