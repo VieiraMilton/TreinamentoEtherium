@@ -126,3 +126,4 @@ contract AluguelContract is Owner {
         return alugueis[posicaoAluguel].identificadorUnico;
     }
 }
+// 0x5417D1e591465F5b44927f97190E6bE38dcD30DE
